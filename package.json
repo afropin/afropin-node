@@ -1,0 +1,43 @@
+{
+  "name": "@afropin/afropin",
+  "version": "1.0.0",
+  "description": "Node.js library for the AfroPin gift card API: sell, top up and redeem PINs, quotes, stores and webhooks",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test test/*.test.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "homepage": "https://afropin.com/developers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afropin/afropin-node.git"
+  },
+  "author": "AfroPin Software Limited",
+  "keywords": [
+    "afropin",
+    "gift cards",
+    "vouchers",
+    "pins",
+    "api",
+    "nigeria"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
