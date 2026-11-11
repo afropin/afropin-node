@@ -126,7 +126,7 @@ export class ResellerPins {
 export class ResellerBrandStores {
   constructor(private readonly client: AfroPin) {}
 
-  /** Brand stores where your customers can spend the PINs you sell. (GET /api/v1/reseller/brand-stores) */
+  /** Brand stores where a PIN of one product can be spent: pass catalog_id. (GET /api/v1/reseller/brand-stores) */
   list(params: Params = {}, options: RequestOptions = {}): Promise<Page> {
     return this.client.request('GET', `reseller/brand-stores`, params, options, true);
   }
@@ -235,6 +235,15 @@ export class BrandIssuingCatalog {
   /** One product you can sell. (GET /api/v1/brand/issuing-catalog/{catalog_id}) */
   get(catalogId: string, params: Params = {}, options: RequestOptions = {}): Promise<any> {
     return this.client.request('GET', `brand/issuing-catalog/${encodeURIComponent(catalogId)}`, params, options);
+  }
+}
+
+export class BrandBrandStores {
+  constructor(private readonly client: AfroPin) {}
+
+  /** Brand stores where a PIN of one of your products can be spent: pass catalog_id. (GET /api/v1/brand/brand-stores) */
+  list(params: Params = {}, options: RequestOptions = {}): Promise<Page> {
+    return this.client.request('GET', `brand/brand-stores`, params, options, true);
   }
 }
 
@@ -369,6 +378,7 @@ export class Brand {
   readonly stores: BrandStores;
   readonly cards: BrandCards;
   readonly issuingCatalog: BrandIssuingCatalog;
+  readonly brandStores: BrandBrandStores;
   readonly pins: BrandPins;
   readonly catalog: BrandCatalog;
   readonly resellerStores: BrandResellerStores;
@@ -380,6 +390,7 @@ export class Brand {
     this.stores = new BrandStores(client);
     this.cards = new BrandCards(client);
     this.issuingCatalog = new BrandIssuingCatalog(client);
+    this.brandStores = new BrandBrandStores(client);
     this.pins = new BrandPins(client);
     this.catalog = new BrandCatalog(client);
     this.resellerStores = new BrandResellerStores(client);

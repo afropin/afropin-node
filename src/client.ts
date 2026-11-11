@@ -19,7 +19,7 @@ export interface RequestOptions {
   idempotencyKey?: string;
 }
 
-export const VERSION = '2.0.0';
+export const VERSION = '2.1.0';
 export const BASE_URL = 'https://afropin.com/api/v1';
 
 /**
