@@ -1,6 +1,6 @@
 {
   "name": "@afropin/afropin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Node.js library for the AfroPin gift card API: sell, top up and redeem PINs, quotes, stores and webhooks",
   "license": "MIT",
   "main": "dist/index.js",

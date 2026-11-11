@@ -1,5 +1,7 @@
 # AfroPin for Node.js
 
+[![npm](https://img.shields.io/npm/v/@afropin/afropin)](https://www.npmjs.com/package/@afropin/afropin)
+
 The AfroPin gift card API from Node.js and TypeScript: sell, top up and redeem PINs, quotes, stores and webhooks.
 
 ```
@@ -89,10 +91,15 @@ import express from 'express';
 import { parseWebhook } from '@afropin/afropin';
 
 app.post('/afropin/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const event = parseWebhook(req.body, req.header('webhook-secret'), process.env.AFROPIN_WEBHOOK_SECRET!);
+  const event = parseWebhook(req.body, req.headers, process.env.AFROPIN_WEBHOOK_SECRET!);
   if (event.type === 'pin.spent') { /* ... */ }
   res.sendStatus(200);
 });
 ```
 
-`parseWebhook` throws `invalid_signature` when the signature doesn't match. Use the raw body exactly as received.
+Each webhook carries `webhook-id`, `webhook-timestamp` and `webhook-signature` headers. `parseWebhook` throws `invalid_signature` when the
+signature doesn't match the body, a header is missing, or the timestamp is more than 5 minutes from now (check your
+server clock). Use the raw body exactly as received. The event's `id` is the same on every retry, so use it to skip
+an event you've already handled.
+
+A fetch `Headers` object works too, for example `request.headers` in a Next.js route handler.

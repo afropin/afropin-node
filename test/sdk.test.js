@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { createHash, createHmac, randomBytes } = require('node:crypto');
 const fs = require('node:fs');
-const { AfroPin, AfroPinError, Page, verifyWebhook } = require('../dist');
+const { AfroPin, AfroPinError, Page, verifyWebhook, parseWebhook } = require('../dist');
 
 test('signs requests and returns data', async () => {
   let sent;
@@ -26,8 +26,17 @@ test('signs requests and returns data', async () => {
 
 test('verifies webhooks', () => {
   const body = '{"type":"pin.sold","data":{"pin_id":"p1"}}';
-  assert.ok(verifyWebhook(body, createHmac('sha256', 'whsec').update(body).digest('hex'), 'whsec'));
-  assert.ok(!verifyWebhook(body, createHmac('sha256', 'other').update(body).digest('hex'), 'whsec'));
+  const now = Math.floor(Date.now() / 1000);
+  const signed = (secret, at = now) => ({
+    'webhook-id': 'evt_1', 'webhook-timestamp': String(at),
+    'webhook-signature': createHmac('sha256', secret).update(`evt_1.${at}.${body}`).digest('hex'),
+  });
+  assert.ok(verifyWebhook(body, signed('whsec'), 'whsec'));
+  assert.ok(verifyWebhook(Buffer.from(body), new Headers(signed('whsec')), 'whsec'));
+  assert.strictEqual(parseWebhook(body, signed('whsec'), 'whsec').id, 'evt_1');
+  assert.ok(!verifyWebhook(body, signed('other'), 'whsec'));
+  assert.ok(!verifyWebhook(body, signed('whsec', now - 301), 'whsec'));
+  assert.ok(!verifyWebhook(body, {}, 'whsec'));
 });
 
 const envFile = process.env.AFROPIN_TEST_ENV;

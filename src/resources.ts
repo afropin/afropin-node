@@ -112,6 +112,11 @@ export class ResellerPins {
     return this.client.request('POST', `reseller/pins/webhook`, params, options);
   }
 
+  /** Choose who delivers a PIN's codes to its customer: us (handle_delivery true) or you. (POST /api/v1/reseller/pins/delivery) */
+  setDelivery(params: Params = {}, options: RequestOptions = {}): Promise<any> {
+    return this.client.request('POST', `reseller/pins/delivery`, params, options);
+  }
+
   /** A PIN's cashouts. (GET /api/v1/reseller/pins/{pin_id}/cashouts) */
   cashouts(pinId: string, params: Params = {}, options: RequestOptions = {}): Promise<Page> {
     return this.client.request('GET', `reseller/pins/${encodeURIComponent(pinId)}/cashouts`, params, options, true);
@@ -279,6 +284,11 @@ export class BrandPins {
   /** Change a PIN's webhook. (POST /api/v1/brand/pins/webhook) */
   setWebhook(params: Params = {}, options: RequestOptions = {}): Promise<any> {
     return this.client.request('POST', `brand/pins/webhook`, params, options);
+  }
+
+  /** Choose who delivers a PIN's codes to its customer: us (handle_delivery true) or you. (POST /api/v1/brand/pins/delivery) */
+  setDelivery(params: Params = {}, options: RequestOptions = {}): Promise<any> {
+    return this.client.request('POST', `brand/pins/delivery`, params, options);
   }
 
   /** Check a PIN before redeeming it; nothing changes. (POST /api/v1/brand/pins/check) */
